@@ -11,15 +11,17 @@ load_dotenv()
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+# Danh sách các region cho option choice
 REGIONS = ["IND", "BR", "SG", "RU", "ID", "TW", "US", "VN", "TH", "ME", "PK", "CIS", "BD", "NA", "SAC", "EU"]
 
 @bot.tree.command(name="info", description="Lấy thông tin người chơi Free Fire")
 @app_commands.describe(uid="ID tài khoản Free Fire", region="Khu vực của tài khoản")
 @app_commands.choices(region=[app_commands.Choice(name=r, value=r) for r in REGIONS])
 async def info(interaction: discord.Interaction, uid: str, region: app_commands.Choice[str]):
-    await interaction.response.defer()
+    await interaction.response.defer()  # Defer để tránh timeout
     
-    api_url = f"https://dark-aura-info-api-v1-main.vercel.app/player-info?region={region.value}&uid={uid}"
+    # 🔥 ĐÃ CẬP NHẬT: Sử dụng API mới của bạn
+    api_url = f"https://free-fire-info-site-rust.vercel.app/player-info?region={region.value}&uid={uid}"
     
     async with aiohttp.ClientSession() as session:
         try:
@@ -30,16 +32,19 @@ async def info(interaction: discord.Interaction, uid: str, region: app_commands.
                     
                 data = await response.json()
                 
+                # Kiểm tra nếu API trả về lỗi
                 if "error" in data:
                     await interaction.followup.send(f"❌ Lỗi từ API: {data['error']}")
                     return
                 
+                # Tạo embed
                 embed = discord.Embed(
                     title=f"🎮 Thông tin người chơi {data['basicInfo']['nickname']}",
                     description=f"Khu vực: **{data['basicInfo']['region']}**",
                     color=discord.Color.gold()
                 )
                 
+                # === Basic Info ===
                 basic = data['basicInfo']
                 embed.add_field(
                     name="📋 Thông tin cơ bản",
@@ -56,6 +61,7 @@ async def info(interaction: discord.Interaction, uid: str, region: app_commands.
                     inline=False
                 )
                 
+                # === Rank Info ===
                 embed.add_field(
                     name="🏆 Xếp hạng",
                     value=(
@@ -69,6 +75,7 @@ async def info(interaction: discord.Interaction, uid: str, region: app_commands.
                     inline=True
                 )
                 
+                # === Clan Info ===
                 if 'clanBasicInfo' in data and data['clanBasicInfo']:
                     clan = data['clanBasicInfo']
                     embed.add_field(
@@ -82,6 +89,7 @@ async def info(interaction: discord.Interaction, uid: str, region: app_commands.
                         inline=True
                     )
                 
+                # === Thông tin thú cưng ===
                 if 'petInfo' in data and data['petInfo']:
                     pet = data['petInfo']
                     embed.add_field(
@@ -94,6 +102,7 @@ async def info(interaction: discord.Interaction, uid: str, region: app_commands.
                         inline=True
                     )
                 
+                # === Thông tin khác ===
                 embed.add_field(
                     name="📝 Khác",
                     value=(
@@ -104,6 +113,7 @@ async def info(interaction: discord.Interaction, uid: str, region: app_commands.
                     inline=False
                 )
                 
+                # Footer với timestamp
                 embed.set_footer(text=f"Yêu cầu bởi {interaction.user.display_name}")
                 embed.timestamp = discord.utils.utcnow()
                 
