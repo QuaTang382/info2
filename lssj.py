@@ -47,7 +47,7 @@ def AsD(reg):
     elif reg in {"BR", "US", "SAC", "NA"}:
         return "uid=4044223479&password=EB067625F1E2CB705C7561747A46D502480DC5D41497F4C90F3FDBC73B8082ED"
     else:
-        return "uid=4108414251&password=E4F9C33BBEB23C0DA0AD7E60F63C8A05D6A878798E3CD32C4E2314C1EEFD4F72"
+        return "uid=5168037088&password=nera_BIGBULLCHEATS_6brcqnGe"
 
 async def ZxV(acc):
     url = "https://ffmconnect.live.gop.garenanow.com/oauth/guest/token/grant"
