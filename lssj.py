@@ -141,4 +141,4 @@ async def xD():
 
 if __name__ == "__main__":
     asyncio.run(xD())
-    FAHHHH.run(host="0.0.0.0", port=5000)
+    FAHHHH.run(host="0.0.0.0", port=8080)
