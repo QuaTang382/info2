@@ -1,0 +1,6 @@
+Flask
+flask-cors
+httpx
+protobuf
+pycryptodome
+gunicorn
