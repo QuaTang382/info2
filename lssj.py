@@ -139,5 +139,6 @@ async def xD():
     await GaY()
     asyncio.create_task(Gsu())
 
-asyncio.run(xD())
-FAHHHH.run()
+if __name__ == "__main__":
+    asyncio.run(xD())
+    FAHHHH.run(host="0.0.0.0", port=5000)
